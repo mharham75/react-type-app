@@ -2,23 +2,21 @@ name: CI
 
 on:
   push:
-    branches: [master, main]
   pull_request:
-    branches: [master, main]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: pnpm
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -32,7 +30,7 @@ jobs:
         run: pnpm lint
 
       - name: Run tests
-        run: pnpm test --run
+        run: pnpm test -- --run
 
       - name: Build project
         run: pnpm build
