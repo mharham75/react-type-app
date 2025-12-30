@@ -1,29 +1,27 @@
-import axios from 'axios';
+import { fetchProducts } from '@/services/products.api';
 import { useEffect, useState } from 'react';
 
-const URL = 'https://dummyjson.com/products';
-
 export interface Product {
-  id?: number;
-  brand?: string;
-  title?: string;
-  category?: string;
-  description?: string;
-  availabilityStatus?: string;
-  returnPolicy?: string;
-  minimumOrderQuantity?: number;
-  price?: number;
-  rating?: string;
-  stock?: number;
-  tags?: string[];
-  discountPercentage?: number;
-  images?: string[];
-  reviews?: Array<{
-    rating?: number;
+  id: number;
+  brand: string;
+  title: string;
+  category: string;
+  description: string;
+  availabilityStatus: string;
+  returnPolicy: string;
+  minimumOrderQuantity: number;
+  price: number;
+  rating: string;
+  stock: number;
+  tags: string[];
+  discountPercentage: number;
+  images: string[];
+  reviews: Array<{
+    rating: number;
     comment: string;
     date: string;
-    reviewEmail?: string;
-    reviewerName?: string;
+    reviewEmail: string;
+    reviewerName: string;
   }>;
 }
 
@@ -40,12 +38,11 @@ const ProductsListingPage = () => {
   }, [products]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const loadProducts = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(URL);
-        setProducts(response.data.products);
-        console.log(response.data.products);
+        const productsData = await fetchProducts();
+        setProducts(productsData);
       } catch (error) {
         console.log(error);
         setError('Something went wrong!');
@@ -53,7 +50,8 @@ const ProductsListingPage = () => {
         setIsLoading(false);
       }
     };
-    fetchProducts();
+
+    loadProducts();
   }, []);
 
   const handleSearchChange = (inputValue: string) => {
